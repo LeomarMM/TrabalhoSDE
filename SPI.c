@@ -1,29 +1,42 @@
 #include "SPI.h"
+#include "digital.h"
 #include "LPC17xx.h"
-#define T_SPISCK 10000
-#define PCSPI_bit 8
-#define PCLK_SPI_bit 16
+#include "delay.h"
+#define SPI_SSEL PIN(0,11)
+#define SPI_SCLK PIN(0,15)
+#define SPI_MOSI PIN(0,19)
+#define SPI_MISO PIN(0,20)
+
 void spi_init()
 {
-    unsigned int PCLK = SystemCoreClock/4; // PCLK_SPI sera mantido em CCLK/4
-    LPC_SC->PCONP |= 1 << PCSPI_bit; // Garantindo que o SPI esteja habilitado
-    LPC_SC->PCLKSEL0 &= ~(3 << 16); // Garantindo que PCLK_SPI seja CCLK/4
-    LPC_PINCON->PINSEL0 |= (3 << 30); // Seleção do modo do pino P0.15 para SCK
-    LPC_PINCON->PINSEL1 |= 63; // Seleção do modo dos pinos P0.16, P0.17 e P0.18 para  SSEL/MISO/MOSI
-    //ISER0 |= (1 << 13); //Habilitando interrupções para SPI
-    uint8_t CR0 = PCLK/(T_SPISCK);
-    if(!(CR0 % 2)) CR0++; //SPCCR0 deve ser um número par
-    LPC_SPI->SPCCR = CR0;
-    LPC_SPI->SPCR = 00000010000;
+	pinMode(SPI_SSEL, OUTPUT);			//SSEL - P0.11 - Amarelo
+	pinMode(SPI_SCLK, OUTPUT);			//SCLK - P0.15 - Roxo
+	pinMode(SPI_MOSI, OUTPUT);			//MOSI - P0.19 - Laranja
+	pinMode(SPI_MISO, INPUT);			//MISO - P0.20 - Verde
+	digitalWrite(SPI_SSEL, HIGH);		//SSEL - P0.11 - HIGH on init
+	digitalWrite(SPI_SCLK, LOW);		//SCLK - P0.15 - LOW on init
+	digitalWrite(SPI_MOSI, LOW);		//MOSI - P0.19 - LOW on init
 }
 
-void spi_write(unsigned char data)
+void spi_write(uint8_t data)
 {
-    LPC_SPI->SPDR = data;
-    while(!((LPC_SPI->SPSR >> 7) & 1));
+	for(uint8_t bit = 7; bit >= 0; bit--)
+	{
+		digitalWrite(SPI_SCLK, LOW); //Iniciar SCLK em LOW / Preparar dados na borda de descida
+		digitalWrite(SPI_MOSI, ((data >> bit) & 1)); //Enviar bit para o pino MOSI
+		delay_ms(1); //Delay para garantir transição do pino MOSI
+		digitalWrite(SPI_SCLK, HIGH); //SCLK em HIGH, dados serão lidos na borda de subida pelo slave
+		delay_ms(1);
+	}
 }
 
-unsigned char spi_read()
+uint8_t spi_read()
 {
-    
+	unsigned char data = 0;
+	return data;
+}
+
+void spi_ssel(uint8_t state)
+{
+	digitalWrite(SPI_SSEL, state);
 }
