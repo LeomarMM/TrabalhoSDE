@@ -1,6 +1,7 @@
+#include "MCP23S17.h"
 #include "SPI.h"
 #include "digital.h"
-
+#include "delay.h"
 void mcp23S17_init()
 {
 	mcp23S17_write_register(0x0A, 0x80); //IOCON.BANK = 1
