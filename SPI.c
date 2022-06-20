@@ -24,9 +24,9 @@ void spi_write(uint8_t data)
 	{
 		digitalWrite(SPI_SCLK, LOW); //Iniciar SCLK em LOW / Preparar dados na borda de descida
 		digitalWrite(SPI_MOSI, ((data >> bit) & 1)); //Enviar bit para o pino MOSI
-		delay_ms(SPI_DELAY); //Delay para garantir transição do pino MOSI
+		delay_us(SPI_DELAY); //Delay para garantir transição do pino MOSI
 		digitalWrite(SPI_SCLK, HIGH); //SCLK em HIGH, dados serão lidos na borda de subida pelo slave
-		delay_ms(SPI_DELAY);
+		delay_us(SPI_DELAY);
 	}
 }
 
@@ -36,9 +36,9 @@ uint8_t spi_read()
 	for(int8_t bit = 7; bit >= 0; bit--)
 	{
 		digitalWrite(SPI_SCLK, LOW); //Iniciar SCLK em LOW
-		delay_ms(SPI_DELAY);
+		delay_us(SPI_DELAY);
 		digitalWrite(SPI_SCLK, HIGH);
-		delay_ms(SPI_DELAY);
+		delay_us(SPI_DELAY);
 		data += digitalRead(SPI_MISO) << bit;
 	}
 	return data;
