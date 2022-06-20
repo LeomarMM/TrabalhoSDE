@@ -14,7 +14,7 @@ void spi_init()
 	pinMode(SPI_MOSI, OUTPUT);			//MOSI - P0.19 - Laranja
 	pinMode(SPI_MISO, INPUT);			//MISO - P0.20 - Verde
 	digitalWrite(SPI_SSEL, HIGH);		//SSEL - P0.11 - HIGH on init
-	digitalWrite(SPI_SCLK, LOW);		//SCLK - P0.15 - LOW on init
+	digitalWrite(SPI_SCLK, HIGH);		//SCLK - P0.15 - LOW on init
 	digitalWrite(SPI_MOSI, LOW);		//MOSI - P0.19 - LOW on init
 }
 
@@ -35,10 +35,11 @@ uint8_t spi_read()
 	unsigned char data = 0;
 	for(int8_t bit = 7; bit >= 0; bit--)
 	{
-		digitalWrite(SPI_SCLK, HIGH); //Iniciar SCLK em HIGH
-		delay_ms(SPI_DELAY); //Delay para garantir transição do pino MOSI
-		digitalWrite(SPI_SCLK, HIGH); //SCLK em HIGH, dados serão lidos na borda de subida pelo slave
+		digitalWrite(SPI_SCLK, LOW); //Iniciar SCLK em LOW
 		delay_ms(SPI_DELAY);
+		digitalWrite(SPI_SCLK, HIGH);
+		delay_ms(SPI_DELAY);
+		data += digitalRead(SPI_MISO) << bit;
 	}
 	return data;
 }
