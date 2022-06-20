@@ -48,6 +48,7 @@ int main()
     mcp23S17_digitalWrite(MCP_A7, (contador) & 1);
     uint8_t bit = mcp23S17_digitalRead(MCP_A2);
     seg_apresenta(contador);
+    
     if(bit && buttonPressed)
     {
         buttonPressed = 0;
