@@ -3,12 +3,13 @@
 #define __PERIODICA__
 #include "LPC17xx.h"
 
-struct elemento {
-    char nome[50];
-    uint16_t  periodo;
-    uint16_t  contador;
-    void (*funcao)(void);
-    struct elemento *proximo;
+struct elemento 
+{
+	char nome[50];
+	uint16_t  periodo;
+	uint16_t  contador;
+	void (*funcao)(void);
+	struct elemento *proximo;
 };
 
 

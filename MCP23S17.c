@@ -2,9 +2,10 @@
 #include "SPI.h"
 #include "digital.h"
 #include "delay.h"
-uint8_t GPIO_ADDR[] = {0x12, 0x13};
-uint8_t IODIR_ADDR[] = {0x00, 0x01};
-uint8_t GPPU_ADDR[] = {0x0C, 0x0D};
+
+const uint8_t GPIO_ADDR[] = {0x12, 0x13};
+const uint8_t IODIR_ADDR[] = {0x00, 0x01};
+const uint8_t GPPU_ADDR[] = {0x0C, 0x0D};
 
 uint8_t mcp23S17_read_register(uint8_t addr)
 {

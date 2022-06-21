@@ -4,10 +4,11 @@
 #include <stdint.h>
 #define OFF 0
 #define ON 1
+
 enum 
 {
-    MCP_A0, MCP_A1, MCP_A2, MCP_A3, MCP_A4, MCP_A5, MCP_A6, MCP_A7,
-    MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4, MCP_B5, MCP_B6, MCP_B7
+	MCP_A0, MCP_A1, MCP_A2, MCP_A3, MCP_A4, MCP_A5, MCP_A6, MCP_A7,
+	MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4, MCP_B5, MCP_B6, MCP_B7
 };
 
 uint8_t mcp23S17_read_register(uint8_t addr);
