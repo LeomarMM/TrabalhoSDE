@@ -35,11 +35,16 @@ uint8_t spi_read()
 	unsigned char data = 0;
 	for(int8_t bit = 7; bit >= 0; bit--)
 	{
-		digitalWrite(SPI_SCLK, LOW); //Iniciar SCLK em LOW
+		/*
+		* SCLK sempre estará em HIGH ao chamar essa rotina, logo
+		* iniciar spi_read em LOW garantirá uma borda de descida,
+		* permitindo que o slave carregue os dados antes da próxima borda de subida
+		*/
+		digitalWrite(SPI_SCLK, LOW);
 		delay_us(SPI_DELAY);
 		digitalWrite(SPI_SCLK, HIGH);
 		delay_us(SPI_DELAY);
-		data += digitalRead(SPI_MISO) << bit;
+		data += digitalRead(SPI_MISO) << bit; //Dado deve ser recebido antes da próxima borda de descida
 	}
 	return data;
 }

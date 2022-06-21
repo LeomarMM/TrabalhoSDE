@@ -29,8 +29,15 @@ void mcp23S17_write_register(uint8_t addr, uint8_t word)
 
 void mcp23S17_pinMode(uint8_t gpio, uint8_t mode)
 {
-	uint8_t pin = gpio & 7;
-	uint8_t port = (gpio >> 3) & 1;
+	uint8_t pin = gpio & 7;			//Decodifica pino alvo
+	uint8_t port = (gpio >> 3) & 1; //Decodifica porta alvo
+	/*
+	* O MCP23S17 permite apenas gravações e leituras de todo registrador,
+	* logo é necessário ler todo o conteúdo do registrador,
+	* fazer as alterações no bit desejado, sem interferir em outros bits,
+	* e enviar o dado atualizado pro registrador
+	* Além do pinMode, o digitalWrite e portPullup também operam da mesma forma
+	*/
 	uint8_t port_read = mcp23S17_read_register(IODIR_ADDR[port]);
 	if(mode == INPUT) port_read |= 1 << pin;
 	else port_read &= ~(1 << pin);
