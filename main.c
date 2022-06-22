@@ -32,7 +32,7 @@ int main()
 	mcp23S17_pinMode(MCP_A2, INPUT);
 	mcp23S17_portPullup(MCP_A2, ON);
 
-	uint8_t buttonPressed = 1, contador = 1, toggle = 1;
+	uint8_t buttonPressed = 1, contador = 1, mode = 1;
 	while(1)
 	{
 
@@ -52,10 +52,10 @@ int main()
 		{
 				buttonPressed = 1;
 				contador = 0;
-				toggle = !toggle;
-				contador = toggle;
+				mode = !mode;
+				contador = mode;
 		}
-		if(toggle)
+		if(mode)
 		{
 			if(contador < 16) contador = (contador << 1);
 			else contador = 1;

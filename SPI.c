@@ -16,6 +16,15 @@ void spi_init()
 	digitalWrite(SPI_SSEL, HIGH);		//SSEL - P0.11 - HIGH on init
 	digitalWrite(SPI_SCLK, HIGH);		//SCLK - P0.15 - LOW on init
 	digitalWrite(SPI_MOSI, LOW);		//MOSI - P0.19 - LOW on init
+
+	/*
+	* SPI opera no modo 1,1. De acordo com o datasheet do expansor
+	* de portas, o CS deve ser alternado uma vez antes da primeira
+	* comunicação com o MCP23S17 (Pg. 8 - Fig. 1-5)
+	*/
+	spi_ssel(LOW);
+	delay_us(SPI_DELAY);
+	spi_ssel(HIGH);
 }
 
 void spi_write(uint8_t data)
@@ -32,7 +41,7 @@ void spi_write(uint8_t data)
 
 uint8_t spi_read()
 {
-	unsigned char data = 0;
+	uint8_t data = 0;
 	for(int8_t bit = 7; bit >= 0; bit--)
 	{
 		/*
